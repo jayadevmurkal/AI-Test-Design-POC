@@ -1,0 +1,32 @@
+# Maven
+target/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# Generated Outputs
+GeneratedTests.java
+src/test/java/tests/GeneratedTests.java
+generated-prompt.txt
+src/main/resources/ai-response.txt
+
+# Excel Outputs
+*.xlsx
+
+# Reports
+reports/
+ExtentReport.html
+
+# TestNG
+
+# API Keys
+src/main/resources/config.properties
+
+# OS
+.DS_Store
+Thumbs.db

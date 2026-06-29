@@ -1,0 +1,15 @@
+# AI Test Design POC Requirements
+# Define requirements and scope of the test design generation tool.
+As a customer,
+
+I want to register an account
+
+So that I can access the application.
+
+Acceptance Criteria:
+
+1. Email should be unique.
+2. Password should contain minimum 8 characters.
+3. Password should contain one uppercase, lowercase and special character.
+4. Successful registration should show success message.
+5. Existing email should display error message.
