@@ -1,5 +1,12 @@
 # 🤖 AI Test Design POC
 
+![Java](https://img.shields.io/badge/Java-17-orange)
+![Selenium](https://img.shields.io/badge/Selenium-WebDriver-brightgreen)
+![TestNG](https://img.shields.io/badge/TestNG-Testing-red)
+![Maven](https://img.shields.io/badge/Maven-Build-blue)
+![Gemini AI](https://img.shields.io/badge/Google-Gemini_AI-purple)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
 An AI-powered Test Design and Selenium Automation Framework built using **Java**, **TestNG**, **Selenium WebDriver**, and **Google Gemini API**.
 
 This project automatically generates:
