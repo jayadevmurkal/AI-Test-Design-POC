@@ -79,34 +79,54 @@ src
 
 # ⚙ Workflow
 
-```
-Requirement
-      │
-      ▼
-Prompt Builder
-      │
-      ▼
-Gemini API
-      │
-      ▼
-AI Response Parser
-      │
-      ▼
-TestDesignData
-      │
- ┌────┼──────────┐
- ▼    ▼          ▼
-Excel Selenium TestNG
-Generator Generator Generator
-                │
-                ▼
-         Execute Tests
-                │
-                ▼
-         Extent Report
+```mermaid
+flowchart TD
+
+A[User Requirement] --> B[Prompt Builder]
+
+B --> C[Gemini API]
+
+C --> D[AI Response]
+
+D --> E[AIResponseReader]
+
+E --> F[TestDesignData]
+
+F --> G[TestCaseBuilder]
+
+G --> H[Excel Exporter]
+
+F --> I[Selenium Code Generator]
+
+F --> J[TestNG XML Generator]
+
+I --> K[Generated Selenium Tests]
+
+J --> L[TestNG Suite]
+
+L --> M[Test Execution]
+
+M --> N[Extent Report]
+
+M --> O[Screenshots on Failure]
 ```
 
----
+# 🏗 Project Architecture
+
+The framework follows a modular architecture to keep responsibilities separated.
+
+| Module | Responsibility |
+|---------|----------------|
+| Prompt Builder | Creates AI prompts from requirements |
+| Gemini Service | Sends requests to Google Gemini API |
+| AI Response Reader | Parses AI responses |
+| TestDesignData | Stores structured test information |
+| TestCaseBuilder | Builds Positive, Negative, Edge and Automation scenarios |
+| SeleniumCodeGenerator | Generates Selenium TestNG automation |
+| ExcelExporter | Exports structured test cases into Excel |
+| TestNGXmlGenerator | Generates TestNG XML automatically |
+| BaseTest | Common Selenium setup |
+| TestListener | Generates Extent Reports and screenshots |
 
 # ▶ How to Run
 
