@@ -38,14 +38,14 @@ public class Main {
 
                 System.out.println(aiResponse);
 
-                AIResponseWriter.saveResponse(aiResponse);
+                AIResponseWriter.saveAIResponse(aiResponse);
 
                 System.out.println(
                                 "\nAI response saved successfully!");
                 // System.out.println(
                 // "Using local ai-response.txt file");
 
-                TestDesignData data = AIResponseReader.readResponses();
+                TestDesignData data = AIResponseReader.readAIResponse();
 
                 System.out.println(
                                 "Positive Cases: "

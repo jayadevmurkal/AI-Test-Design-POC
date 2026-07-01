@@ -46,6 +46,35 @@ public class SeleniumCodeGenerator {
                 return uniqueScenarios.stream().toList();
         }
 
+        private static String toCamelCaseMethodName(String scenario) {
+
+                // Remove special characters
+                scenario = scenario.replaceAll("[^a-zA-Z0-9 ]", "");
+
+                String[] words = scenario.trim().split("\\s+");
+
+                if (words.length == 0) {
+                        return "generatedTest";
+                }
+
+                StringBuilder methodName = new StringBuilder();
+
+                // First word in lowercase
+                methodName.append(words[0].toLowerCase());
+
+                // Remaining words start with uppercase
+                for (int i = 1; i < words.length; i++) {
+
+                        methodName.append(
+                                        Character.toUpperCase(words[i].charAt(0)));
+
+                        methodName.append(
+                                        words[i].substring(1).toLowerCase());
+                }
+
+                return methodName.toString();
+        }
+
         private static String generateDataProviders(
                         TestDesignData data) {
 
@@ -110,7 +139,57 @@ public class SeleniumCodeGenerator {
                 System.out.println("EDGE COUNT = " + data.getEdgeCases().size());
                 System.out.println("AFTER GENERATE TESTS");
 
+                logGenerationSummary(data);
+
+                generatePackage(code);
+
+                generateImports(code);
+
+                generateClassHeader(code);
+
+                code.append(generateDataProviders(data));
+
+                generateClassFooter(code);
+
+                generateAllTests(code, data);
+
+                System.out.println("===== GENERATED CODE =====");
+                System.out.println(code.toString());
+                System.out.println("===== END GENERATED CODE =====");
+
+                writeGeneratedFile(code);
+        }
+
+        private static void logGenerationSummary(TestDesignData data) {
+                System.out.println("POSITIVE LIST = " + data.getPositiveCases());
+                System.out.println("NEGATIVE LIST = " + data.getNegativeCases());
+                System.out.println("EDGE LIST = " + data.getEdgeCases());
+        }
+
+        private static void generateAllTests(
+                        StringBuilder code,
+                        TestDesignData data) {
+
+                generateTests(
+                                code,
+                                removeDuplicates(data.getPositiveCases()));
+
+                generateTests(
+                                code,
+                                removeDuplicates(data.getNegativeCases()));
+
+                generateTests(
+                                code,
+                                removeDuplicates(data.getEdgeCases()));
+        }
+
+        private static void generatePackage(StringBuilder code) {
+
                 code.append("package tests;\n\n");
+
+        }
+
+        private static void generateImports(StringBuilder code) {
 
                 code.append("import org.testng.annotations.Test;\n");
                 code.append("import org.testng.annotations.DataProvider;\n");
@@ -118,42 +197,32 @@ public class SeleniumCodeGenerator {
 
                 code.append("import pages.RegistrationPage;\n\n");
 
-                code.append(
-                                "import base.BaseTest;\n\n");
+                code.append("import base.BaseTest;\n\n");
+
+        }
+
+        private static void generateClassHeader(StringBuilder code) {
 
                 code.append(
                                 "public class GeneratedTests extends BaseTest {\n\n");
 
-                System.out.println("POSITIVE LIST = " + data.getPositiveCases());
-                System.out.println("NEGATIVE LIST = " + data.getNegativeCases());
-                System.out.println("EDGE LIST = " + data.getEdgeCases());
+        }
 
-                generateTests(
-                                code,
-                                removeDuplicates(
-                                                data.getPositiveCases()));
-
-                generateTests(
-                                code,
-                                removeDuplicates(
-                                                data.getNegativeCases()));
-
-                generateTests(
-                                code,
-                                removeDuplicates(
-                                                data.getEdgeCases()));
-
-                code.append(generateDataProviders(data));
+        private static void generateClassFooter(StringBuilder code) {
 
                 code.append("}");
 
-                System.out.println("===== GENERATED CODE =====");
-                System.out.println(code.toString());
-                System.out.println("===== END GENERATED CODE =====");
+        }
+
+        private static void writeGeneratedFile(StringBuilder code)
+                        throws Exception {
 
                 Files.writeString(
+
                                 Path.of("src/test/java/tests/GeneratedTests.java"),
+
                                 code.toString());
+
         }
 
         private static void generateTests(
@@ -167,11 +236,23 @@ public class SeleniumCodeGenerator {
 
                         System.out.println("GENERATING TEST FOR: " + scenario);
 
-                        String methodName = scenario
-                                        .replaceAll("[^a-zA-Z0-9 ]", "")
-                                        .replace(" ", "_");
+                        String methodName = toCamelCaseMethodName(scenario);
 
                         String provider = getDataProviderName(scenario);
+
+                        code.append(
+                                        "    /**\n");
+
+                        code.append(
+                                        "     * Test Scenario:\n");
+
+                        code.append(
+                                        "     * "
+                                                        + scenario
+                                                        + "\n");
+
+                        code.append(
+                                        "     */\n");
 
                         code.append(
                                         "    @Test(dataProvider=\""

@@ -3,12 +3,13 @@ package ai;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import okhttp3.*;
 
+import config.ConfigKeys;
+import config.ConfigLoader;
+import okhttp3.*;
+import config.ConfigLoader;
+import config.ConfigKeys;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Properties;
 import java.time.Duration;
 
 public class GeminiService {
@@ -16,28 +17,13 @@ public class GeminiService {
         public static String generateResponse(String prompt)
                         throws Exception {
 
-                Properties properties = new Properties();
-
-                properties.load(
-                                Files.newInputStream(
-                                                Paths.get(
-                                                                "src/main/resources/config.properties")));
-
-                String apiKey = properties.getProperty("gemini.api.key");
-
-                System.out.println("Using API Key: "
-                                + apiKey.substring(apiKey.length() - 6));
+                String apiKey = ConfigLoader.getProperty(ConfigKeys.GEMINI_API_KEY);
 
                 System.out.println("API Key Loaded Successfully");
-                System.out.println("API Key Prefix: " + apiKey.substring(0, 8));
 
-                System.out.println(
-                                "API Key Loaded: "
-                                                + apiKey.substring(0, 8)
-                                                + "...");
+                String baseUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
-                String url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="
-                                + apiKey;
+                String url = baseUrl + "?key=" + apiKey;
 
                 JsonObject textPart = new JsonObject();
                 textPart.addProperty("text", prompt);

@@ -1,17 +1,16 @@
 package service;
 
+import config.FrameworkConstants;
+
 import java.io.FileWriter;
 
 public class AIResponseWriter {
 
-        public static void saveResponse(String response)
-                        throws Exception {
+        public static void saveAIResponse(String response) throws Exception {
 
-                FileWriter writer = new FileWriter(
-                                "src/main/resources/ai-response.txt");
+                try (FileWriter writer = new FileWriter(FrameworkConstants.AI_RESPONSE_FILE)) {
 
-                writer.write(response);
-
-                writer.close();
+                        writer.write(response);
+                }
         }
 }
