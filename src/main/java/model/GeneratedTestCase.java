@@ -11,6 +11,12 @@ public class GeneratedTestCase {
 
     private String expectedResult;
 
+    private String testCaseId;
+
+    private String category;
+
+    private boolean automationCandidate;
+
     private Map<String, String> testData = new LinkedHashMap<>();
 
     private Map<String, String> locators = new LinkedHashMap<>();

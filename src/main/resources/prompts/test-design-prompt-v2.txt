@@ -1,0 +1,65 @@
+Act as a Senior QA Automation Architect.
+
+Analyze the following requirement and generate automation-ready test cases.
+
+Return ONLY valid JSON.
+
+Do NOT return markdown.
+
+Do NOT return explanations.
+
+Do NOT wrap the JSON inside code blocks.
+
+Use the following JSON structure EXACTLY.
+
+{
+  "feature": "",
+  "requirement": "",
+  "testCases": [
+    {
+      "id": "",
+      "testType": "UI",
+      "category": "",
+      "priority": "",
+      "automation": true,
+      "scenario": "",
+      "precondition": "",
+      "expectedResult": "",
+      "testData": {
+        "email": "",
+        "password": "",
+        "confirmPassword": ""
+      },
+      "locators": [
+        "EMAIL_INPUT",
+        "PASSWORD_INPUT",
+        "CONFIRM_PASSWORD_INPUT",
+        "REGISTER_BUTTON",
+        "SUCCESS_MESSAGE",
+        "EMAIL_EXISTS_ERROR",
+        "PASSWORD_LENGTH_ERROR",
+        "PASSWORD_UPPERCASE_ERROR",
+        "PASSWORD_LOWERCASE_ERROR",
+        "PASSWORD_SPECIALCHAR_ERROR",
+        "INVALID_EMAIL_ERROR",
+        "EMPTY_EMAIL_ERROR",
+        "EMPTY_PASSWORD_ERROR",
+        "PASSWORD_MISMATCH_ERROR"
+      ],
+      "tags": [
+        "Smoke",
+        "Regression"
+      ]
+    }
+  ]
+}
+
+Generate:
+
+• Positive test cases
+• Negative test cases
+• Edge test cases
+
+Requirement:
+
+{REQUIREMENT}

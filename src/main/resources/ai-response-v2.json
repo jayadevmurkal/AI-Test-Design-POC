@@ -1,0 +1,32 @@
+{
+    "feature": "User Registration",
+    "requirement": "Register Account",
+    "testCases": [
+        {
+            "id": "TC001",
+            "testType": "UI",
+            "category": "Positive",
+            "priority": "High",
+            "automation": true,
+            "scenario": "Register with valid email",
+            "precondition": "Registration page is open",
+            "expectedResult": "Registration Successful",
+            "testData": {
+                "email": "valid@example.com",
+                "password": "Password123!",
+                "confirmPassword": "Password123!"
+            },
+            "locators": [
+                "EMAIL_INPUT",
+                "PASSWORD_INPUT",
+                "CONFIRM_PASSWORD_INPUT",
+                "REGISTER_BUTTON",
+                "SUCCESS_MESSAGE"
+            ],
+            "tags": [
+                "Smoke",
+                "Regression"
+            ]
+        }
+    ]
+}
