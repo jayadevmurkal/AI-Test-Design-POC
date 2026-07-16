@@ -10,6 +10,8 @@ Acceptance Criteria:
 
 1. Email should be unique.
 2. Password should contain minimum 8 characters.
-3. Password should contain one uppercase, lowercase and special character.
+3. Password should contain one uppercase, one lowercase, and one special character.
 4. Successful registration should show success message.
-5. Existing email should display error message.
+5. Existing email should display "Email already exists".
+6. Password and Confirm Password must match.
+7. If Password and Confirm Password do not match, display "Passwords do not match".

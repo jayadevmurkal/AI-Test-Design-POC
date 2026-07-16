@@ -13,6 +13,8 @@ public class AIResponseReader {
     private static final String NEGATIVE = "NEGATIVE";
     private static final String EDGE = "EDGE";
     private static final String AUTOMATION = "AUTOMATION";
+    private static final String LOCATORS = "LOCATORS";
+    private static final String EXPECTED = "EXPECTED";
     private static final String DATA = "DATA";
 
     public static TestDesignData readAIResponse() throws Exception {
@@ -24,12 +26,14 @@ public class AIResponseReader {
 
         String currentSection = "";
 
+        model.ScenarioData currentScenarioData = null;
+
         for (String line : lines) {
 
             line = line.trim();
             line = line.replace("**", "").trim();
 
-            if (line.isEmpty()) {
+            if (line.isEmpty() && !currentSection.equals(DATA)) {
                 continue;
             }
 
@@ -55,6 +59,16 @@ public class AIResponseReader {
 
             if (line.equals("[AUTOMATION]")) {
                 currentSection = AUTOMATION;
+                continue;
+            }
+
+            if (line.equals("[LOCATORS]")) {
+                currentSection = LOCATORS;
+                continue;
+            }
+
+            if (line.equals("[EXPECTED_RESULTS]")) {
+                currentSection = EXPECTED;
                 continue;
             }
 
@@ -85,12 +99,123 @@ public class AIResponseReader {
                     data.getAutomationCandidates().add(line);
                     break;
 
+                case LOCATORS:
+
+                    String[] parts = line.split("=", 3);
+
+                    if (parts.length == 3) {
+
+                        data.getLocators().put(
+                                parts[0].trim(),
+                                parts[1].trim() + "=" + parts[2].trim());
+
+                    }
+
+                    break;
+
+                case EXPECTED:
+                    data.getExpectedResults().add(line);
+                    break;
+
                 case DATA:
-                    data.getTestData().add(line);
+
+                    if (line.isBlank()) {
+
+                        if (currentScenarioData != null) {
+                            data.getScenarioData().add(currentScenarioData);
+                            currentScenarioData = null;
+                        }
+
+                        break;
+                    }
+
+                    if (line.startsWith("Scenario=")) {
+
+                        if (currentScenarioData != null) {
+                            data.getScenarioData().add(currentScenarioData);
+                        }
+
+                        currentScenarioData = new model.ScenarioData();
+
+                        currentScenarioData.setScenario(
+                                line.substring("Scenario=".length()).trim());
+
+                        break;
+                    }
+
+                    if (line.startsWith("Email=")) {
+
+                        currentScenarioData.setEmail(
+                                line.substring("Email=".length()).trim());
+
+                        break;
+                    }
+
+                    if (line.startsWith("Password=")) {
+
+                        currentScenarioData.setPassword(
+                                line.substring("Password=".length()).trim());
+
+                        break;
+                    }
+
+                    if (line.startsWith("ConfirmPassword=")) {
+
+                        currentScenarioData.setConfirmPassword(
+                                line.substring("ConfirmPassword=".length()).trim());
+
+                        break;
+                    }
+
                     break;
             }
         }
 
+        // buildScenarioData(data);
+        if (currentScenarioData != null) {
+            data.getScenarioData().add(currentScenarioData);
+        }
+
+        for (int i = 0; i < data.getScenarioData().size()
+                && i < data.getExpectedResults().size(); i++) {
+
+            data.getScenarioData()
+                    .get(i)
+                    .setExpectedResult(
+                            data.getExpectedResults().get(i));
+        }
+
+        System.out.println("\n===== SCENARIO DATA =====");
+
+        for (model.ScenarioData sd : data.getScenarioData()) {
+
+            System.out.println("--------------------------------");
+
+            System.out.println("Scenario : " + sd.getScenario());
+            System.out.println("Email    : " + sd.getEmail());
+            System.out.println("Password : " + sd.getPassword());
+            System.out.println("Confirm  : " + sd.getConfirmPassword());
+            System.out.println("Expected : " + sd.getExpectedResult());
+        }
+
+        System.out.println("LOCATORS = " + data.getLocators());
+
         return data;
+    }
+
+    private static void buildScenarioData(TestDesignData data) {
+
+        for (int i = 0; i < data.getAutomationCandidates().size(); i++) {
+
+            model.ScenarioData sd = new model.ScenarioData();
+
+            sd.setScenario(data.getAutomationCandidates().get(i));
+
+            if (i < data.getExpectedResults().size()) {
+                sd.setExpectedResult(data.getExpectedResults().get(i));
+            }
+
+            data.getScenarioData().add(sd);
+        }
     }
 }

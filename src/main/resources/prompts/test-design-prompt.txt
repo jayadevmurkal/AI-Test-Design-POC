@@ -14,30 +14,81 @@ Act as a Senior QA Architect.
                 [AUTOMATION]
                 List automation candidates.
 
+                [LOCATORS]
+
+                Generate the UI elements required for Selenium automation.
+
+                Return ONLY in the following format:
+
+                fieldName=locatorType=locatorValue
+
+                Example:
+
+                email=id=email
+                password=id=password
+                registerButton=id=register
+                successMessage=id=successMessage
+                errorMessage=id=errorMessage
+
+                Rules:
+
+                1. Every line MUST contain exactly two '=' characters.
+                2. Do NOT return only field names.
+                3. Do NOT add explanations.
+                4. Do NOT use bullets.
+                5. Do NOT use markdown.
+                6. Return ONLY locator definitions.
+
+                [EXPECTED_RESULTS]:
+                - Return ONLY expected results.
+                - Do NOT include automation scenario names.
+                - Keep the order exactly the same as the [AUTOMATION] section.
+                - Return one expected result per line.
+
                 [TEST_DATA]
 
-                uniqueuser@example.com
-                Password123!
-                existinguser@example.com
-                Pass1!
+                Generate structured test data for EVERY automation scenario.
 
-                IMPORTANT:
+                For each automation scenario return:
 
-                Under [TEST_DATA]
-                return ONLY raw values.
+                ScenarioName=<Automation Scenario>
+
+                Email=<email>
+
+                Password=<password>
+
+                ConfirmPassword=<confirm password>
+
+                Rules:
+
+                1. The Scenario value MUST exactly match the automation scenario.
+                2. Return Email, Password and ConfirmPassword for every scenario.
+                3. For password mismatch scenarios, Password and ConfirmPassword MUST be different.
+                4. For empty field scenarios, return an empty value.
+                5. For invalid email scenarios, return an invalid email.
+                6. Do NOT add explanations.
+                7. Do NOT use bullets.
+                8. Do NOT use markdown.
+                9. Keep one blank line between scenarios.
 
                 Example:
 
                 [TEST_DATA]
-                uniqueuser@example.com
-                Password123!
-                existinguser@example.com
-                Pass1!
 
-                DO NOT write:
-                Unique valid email address
-                Valid password
-                Existing email address
+                Scenario=Register with valid unique email
+                Email=uniqueuser@example.com
+                Password=Password123!
+                ConfirmPassword=Password123!
+
+                Scenario=Register with existing email
+                Email=existinguser@example.com
+                Password=Password123!
+                ConfirmPassword=Password123!
+
+                Scenario=Register with password mismatch
+                Email=test@example.com
+                Password=Password123A!
+                ConfirmPassword=Password123B!
 
                 IMPORTANT RULES:
 
@@ -51,6 +102,57 @@ Act as a Senior QA Architect.
                 [NEGATIVE]
                 [EDGE]
                 [AUTOMATION]
+                [LOCATORS]
+
+                Generate ALL UI locators required for the page.
+
+                Include:
+
+                emailInput=id=email
+                passwordInput=id=password
+                confirmPasswordInput=id=confirmPassword
+                registerButton=id=registerButton
+
+                successMessage=id=successMessage
+
+                emailExistsErrorMessage=id=emailExistsError
+                passwordLengthErrorMessage=id=passwordLengthError
+                passwordUppercaseErrorMessage=id=passwordUppercaseError
+                passwordLowercaseErrorMessage=id=passwordLowercaseError
+                passwordSpecialCharErrorMessage=id=passwordSpecialCharError
+                invalidEmailFormatErrorMessage=id=invalidEmailFormatError
+                emptyEmailErrorMessage=id=emptyEmailError
+                emptyPasswordErrorMessage=id=emptyPasswordError
+                passwordMismatchErrorMessage=id=passwordMismatchError
+
+                Also include validation when Password and Confirm Password do not match.
+
+                Generate:
+
+                - Negative test case
+                - Automation scenario
+                - UI locator
+                - Expected result
+                - Test data
+
+                [EXPECTED_RESULTS]
+
+                Provide ONLY the expected result for each automation scenario.
+
+                Do NOT repeat the automation scenario.
+
+                The number and order of expected results MUST exactly match the [AUTOMATION] section.
+
+                Example:
+
+                Registration Successful
+
+                Email already exists
+
+                Password must be at least 8 characters
+
+                Password must contain at least one uppercase character
+
                 [TEST_DATA]
 
                 Requirement:

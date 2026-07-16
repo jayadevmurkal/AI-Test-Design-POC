@@ -7,30 +7,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import config.FrameworkConstants;
 
 public class SeleniumCodeGenerator {
-
-        private static String getEmail(String scenario) {
-
-                scenario = scenario.toLowerCase();
-
-                if (scenario.contains("already exists")) {
-                        return "existinguser@gmail.com";
-                }
-
-                return "validuser@gmail.com";
-        }
-
-        private static String getPassword(String scenario) {
-
-                scenario = scenario.toLowerCase();
-
-                if (scenario.contains("less than 8")) {
-                        return "pass123";
-                }
-
-                return "Pass@123";
-        }
 
         private static List<String> removeDuplicates(
                         List<String> scenarios) {
@@ -75,57 +54,6 @@ public class SeleniumCodeGenerator {
                 return methodName.toString();
         }
 
-        private static String generateDataProviders(
-                        TestDesignData data) {
-
-                String uniqueEmail = "uniqueuser@example.com";
-                String validPassword = "Password123!";
-                String existingEmail = "existinguser@example.com";
-                String invalidPassword = "pass12!";
-
-                List<String> testData = data.getTestData();
-
-                System.out.println("TEST DATA LIST = " + testData);
-
-                if (testData.size() >= 4) {
-
-                        uniqueEmail = "testuser@gmail.com";
-                        validPassword = "Testpass1!";
-                        existingEmail = "existinguser@gmail.com";
-                        invalidPassword = "Pass1!";
-                }
-
-                return
-
-                "    @DataProvider(name=\"validRegistrationData\")\n" +
-                                "    public Object[][] validRegistrationData() {\n" +
-                                "        return new Object[][] {\n" +
-                                "            {\"" + uniqueEmail + "\", \"" + validPassword + "\"}\n" +
-                                "        };\n" +
-                                "    }\n\n" +
-
-                                "    @DataProvider(name=\"duplicateEmailData\")\n" +
-                                "    public Object[][] duplicateEmailData() {\n" +
-                                "        return new Object[][] {\n" +
-                                "            {\"" + existingEmail + "\", \"" + validPassword + "\"}\n" +
-                                "        };\n" +
-                                "    }\n\n" +
-
-                                "    @DataProvider(name=\"invalidPasswordData\")\n" +
-                                "    public Object[][] invalidPasswordData() {\n" +
-                                "        return new Object[][] {\n" +
-                                "            {\"" + uniqueEmail + "\", \"" + invalidPassword + "\"}\n" +
-                                "        };\n" +
-                                "    }\n\n" +
-
-                                "    @DataProvider(name=\"exactPasswordData\")\n" +
-                                "    public Object[][] exactPasswordData() {\n" +
-                                "        return new Object[][] {\n" +
-                                "            {\"exact8@example.com\", \"Abcdef1!\"}\n" +
-                                "        };\n" +
-                                "    }\n\n";
-        }
-
         public static void generate(
                         TestDesignData data)
                         throws Exception {
@@ -147,11 +75,9 @@ public class SeleniumCodeGenerator {
 
                 generateClassHeader(code);
 
-                code.append(generateDataProviders(data));
+                generateAllTests(code, data);
 
                 generateClassFooter(code);
-
-                generateAllTests(code, data);
 
                 System.out.println("===== GENERATED CODE =====");
                 System.out.println(code.toString());
@@ -172,15 +98,9 @@ public class SeleniumCodeGenerator {
 
                 generateTests(
                                 code,
-                                removeDuplicates(data.getPositiveCases()));
-
-                generateTests(
-                                code,
-                                removeDuplicates(data.getNegativeCases()));
-
-                generateTests(
-                                code,
-                                removeDuplicates(data.getEdgeCases()));
+                                removeDuplicates(
+                                                data.getAutomationCandidates()),
+                                data);
         }
 
         private static void generatePackage(StringBuilder code) {
@@ -192,12 +112,10 @@ public class SeleniumCodeGenerator {
         private static void generateImports(StringBuilder code) {
 
                 code.append("import org.testng.annotations.Test;\n");
-                code.append("import org.testng.annotations.DataProvider;\n");
                 code.append("import org.testng.Assert;\n");
-
                 code.append("import pages.RegistrationPage;\n\n");
-
                 code.append("import base.BaseTest;\n\n");
+                code.append("import config.FrameworkConstants;\n");
 
         }
 
@@ -225,20 +143,45 @@ public class SeleniumCodeGenerator {
 
         }
 
+        private static String capitalize(String text) {
+
+                return Character.toUpperCase(text.charAt(0))
+                                + text.substring(1);
+        }
+
+        private static String getParameterName(String locator) {
+
+                String lower = locator.toLowerCase();
+
+                if (lower.contains("email"))
+                        return "email";
+
+                if (lower.contains("confirmpassword"))
+                        return "confirmPassword";
+
+                if (lower.contains("password"))
+                        return "password";
+
+                return "value";
+        }
+
         private static void generateTests(
                         StringBuilder code,
-                        List<String> scenarios) {
+                        List<String> scenarios,
+                        TestDesignData data) {
 
                 System.out.println("generateTests() called");
                 System.out.println("Scenario count = " + scenarios.size());
 
-                for (String scenario : scenarios) {
+                for (model.ScenarioData sd : data.getScenarioData()) {
+
+                        String scenario = sd.getScenario();
+
+                        String expectedResult = sd.getExpectedResult();
 
                         System.out.println("GENERATING TEST FOR: " + scenario);
 
                         String methodName = toCamelCaseMethodName(scenario);
-
-                        String provider = getDataProviderName(scenario);
 
                         code.append(
                                         "    /**\n");
@@ -254,28 +197,27 @@ public class SeleniumCodeGenerator {
                         code.append(
                                         "     */\n");
 
-                        code.append(
-                                        "    @Test(dataProvider=\""
-                                                        + provider +
-                                                        "\")\n");
+                        code.append("    @Test\n");
 
                         code.append(
                                         "    public void "
                                                         + methodName
-                                                        + "(String email, String password) {\n\n");
+                                                        + "() {\n\n");
 
                         code.append(
-                                        "        driver.get(\"https://sample-app.com/register\");\n\n");
+                                        "        driver.get(FrameworkConstants.BASE_URL);\n\n");
 
                         code.append(
                                         "        RegistrationPage page =\n" +
                                                         "                new RegistrationPage(driver);\n\n");
 
                         code.append(
-                                        getSeleniumSteps(scenario));
+                                        getSeleniumSteps(sd, data));
 
                         code.append(
-                                        getAssertion(scenario));
+                                        getAssertion(
+                                                        scenario,
+                                                        expectedResult));
 
                         code.append("\n");
 
@@ -285,73 +227,113 @@ public class SeleniumCodeGenerator {
         }
 
         private static String getSeleniumSteps(
-                        String scenario) {
+                        model.ScenarioData sd,
+                        TestDesignData data) {
 
-                return "        page.enterEmail(email);\n\n" +
+                StringBuilder steps = new StringBuilder();
 
-                                "        page.enterPassword(password);\n\n" +
+                String scenario = sd.getScenario();
 
-                                "        page.clickRegister();\n\n";
+                String email = sd.getEmail();
+
+                String password = sd.getPassword();
+
+                String confirmPassword = sd.getConfirmPassword();
+
+                System.out.println("Scenario = " + scenario);
+                System.out.println("Email = " + email);
+                System.out.println("Password = " + password);
+                System.out.println("Confirm = " + confirmPassword);
+
+                steps.append("        String email = \"" + email + "\";\n");
+                steps.append("        String password = \"" + password + "\";\n");
+                steps.append("        String confirmPassword = \"" + confirmPassword + "\";\n\n");
+
+                for (String field : data.getLocators().keySet()) {
+
+                        String fieldLower = field.toLowerCase();
+
+                        if (fieldLower.contains("button")) {
+
+                                steps.append("        page.click")
+                                                .append(capitalize(field))
+                                                .append("();\n\n");
+
+                        } else if (fieldLower.contains("message")
+                                        || fieldLower.contains("error")) {
+
+                                continue;
+
+                        } else {
+
+                                String variable = getParameterName(field);
+
+                                steps.append("        page.enter")
+                                                .append(capitalize(field))
+                                                .append("(")
+                                                .append(variable)
+                                                .append(");\n\n");
+                        }
+                }
+
+                return steps.toString();
         }
 
-        private static String getAssertion(
-                        String scenario) {
+        private static String getAssertion(String scenario, String expectedResult) {
 
-                scenario = scenario.toLowerCase();
+                if ("Registration Successful".equalsIgnoreCase(expectedResult)) {
 
-                if (scenario.contains("successful")) {
-
-                        return "        Assert.assertEquals(\n" +
-                                        "                page.getSuccessMessage(),\n" +
-                                        "                \"Registration Successful\");\n";
+                        return """
+                                        Assert.assertEquals(
+                                                page.getSuccessMessage(),
+                                                "Registration Successful");
+                                        """;
                 }
 
-                if (scenario.contains("exactly 8")) {
+                String getter = findGetterFromExpectedResult(expectedResult);
 
-                        return "        Assert.assertEquals(\n" +
-                                        "                page.getSuccessMessage(),\n" +
-                                        "                \"Registration Successful\");\n";
-                }
-
-                if (scenario.contains("email already exists")) {
-
-                        return "        Assert.assertEquals(\n" +
-                                        "                page.getErrorMessage(),\n" +
-                                        "                \"Email already exists\");\n";
-                }
-
-                if (scenario.contains("password")) {
-
-                        return "        Assert.assertEquals(\n" +
-                                        "                page.getErrorMessage(),\n" +
-                                        "                \"Invalid Password\");\n";
-                }
-
-                return "        Assert.assertTrue(true);\n";
+                return "        Assert.assertEquals(\n" +
+                                "                page." + getter + "(),\n" +
+                                "                \"" + expectedResult + "\");\n";
         }
 
-        private static String getDataProviderName(String scenario) {
+        private static String findGetterFromExpectedResult(String expectedResult) {
 
-                scenario = scenario.toLowerCase();
+                String lower = expectedResult.toLowerCase();
 
-                if (scenario.contains("successful")) {
-                        return "validRegistrationData";
-                }
+                if (lower.contains("already exists"))
+                        return "getEmailExistsErrorMessage";
 
-                if (scenario.contains("already exists")
-                                || scenario.contains("existing email")) {
-                        return "duplicateEmailData";
-                }
+                if (lower.contains("at least 8")
+                                || lower.contains("minimum 8"))
+                        return "getPasswordLengthErrorMessage";
 
-                if (scenario.contains("less than 8")) {
-                        return "invalidPasswordData";
-                }
+                if (lower.contains("uppercase"))
+                        return "getPasswordUppercaseErrorMessage";
 
-                if (scenario.contains("exactly 8")) {
-                        return "exactPasswordData";
-                }
+                if (lower.contains("lowercase"))
+                        return "getPasswordLowercaseErrorMessage";
 
-                return "validRegistrationData";
+                if (lower.contains("special character"))
+                        return "getPasswordSpecialCharErrorMessage";
+
+                if (lower.contains("invalid email"))
+                        return "getInvalidEmailFormatErrorMessage";
+
+                if (lower.contains("email cannot")
+                                || lower.contains("email field cannot")
+                                || lower.contains("empty email"))
+                        return "getEmptyEmailErrorMessage";
+
+                if (lower.contains("password cannot")
+                                || lower.contains("password field cannot")
+                                || lower.contains("empty password"))
+                        return "getEmptyPasswordErrorMessage";
+
+                if (lower.contains("do not match")
+                                || lower.contains("passwords do not match"))
+                        return "getPasswordMismatchErrorMessage";
+
+                return "getErrorMessage";
         }
-
 }

@@ -6,7 +6,7 @@ import service.AIResponseReader;
 import model.TestDesignData;
 import ai.GeminiService;
 import service.AIResponseWriter;
-
+import generator.PageObjectGenerator;
 import generator.SeleniumCodeGenerator;
 import builder.TestCaseBuilder;
 import model.TestCase;
@@ -47,6 +47,12 @@ public class Main {
 
                 TestDesignData data = AIResponseReader.readAIResponse();
 
+                System.out.println("\n===== TEST DATA =====");
+
+                for (int i = 0; i < data.getTestData().size(); i++) {
+                        System.out.println(i + " -> " + data.getTestData().get(i));
+                }
+
                 System.out.println(
                                 "Positive Cases: "
                                                 + data.getPositiveCases().size());
@@ -70,9 +76,14 @@ public class Main {
                 System.out.println("Test Data: "
                                 + data.getTestData().size());
 
+                System.out.println(
+                                "Expected Results: "
+                                                + data.getExpectedResults().size());
+
                 ExcelExporter.export(data);
                 ExcelExporter.exportTestCases(testCases);
                 SeleniumCodeGenerator.generate(data);
+                PageObjectGenerator.generate("Registration", data);
 
                 TestNGXmlGenerator.generate();
 

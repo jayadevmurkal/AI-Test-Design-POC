@@ -17,4 +17,6 @@ public class FrameworkConstants {
     public static final String TESTNG_XML = "testng.xml";
 
     public static final String TEST_DESIGN_PROMPT = "src/main/resources/prompts/test-design-prompt.txt";
+
+    public static final String BASE_URL = "file:///C:/Users/lenovo/.gemini/antigravity-ide/scratch/AI-Test-Design-POC/sample-registration-app/index.html";
 }
