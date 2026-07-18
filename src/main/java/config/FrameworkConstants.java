@@ -20,5 +20,9 @@ public class FrameworkConstants {
 
     public static final String AI_RESPONSE_JSON = "src/main/resources/ai-response-v2.json";
 
+    public static final String GENERATED_OUTPUT_FOLDER = "generated-output";
+
+    public static final String GENERATED_TEST_OUTPUT = GENERATED_OUTPUT_FOLDER + "/RegistrationTests.java";
+
     public static final String BASE_URL = "file:///C:/Users/lenovo/.gemini/antigravity-ide/scratch/AI-Test-Design-POC/sample-registration-app/index.html";
 }

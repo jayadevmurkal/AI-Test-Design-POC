@@ -2,6 +2,7 @@ import model.v2.GeneratedTestSuite;
 import service.AIResponseReaderV2;
 import generator.v2.SeleniumCodeGeneratorV2;
 import model.v2.GeneratedTestCase;
+import generator.v2.PageObjectGeneratorV2;
 
 public class MainV2 {
 
@@ -12,6 +13,8 @@ public class MainV2 {
             GeneratedTestSuite suite = AIResponseReaderV2.read();
 
             SeleniumCodeGeneratorV2.generate(suite);
+
+            PageObjectGeneratorV2.generate(suite);
 
             System.out.println("\n==============================");
             System.out.println(" GENERATED TEST SUITE V2");

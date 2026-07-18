@@ -1,11 +1,9 @@
-package generatedtests;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
+import framework.BaseTest;
 import pages.RegistrationPage;
 
-public class RegistrationTests {
+public class RegistrationTests extends BaseTest {
 
     @Test
     public void registerWithValidEmail() {
@@ -15,10 +13,14 @@ public class RegistrationTests {
 
         RegistrationPage page = new RegistrationPage(driver);
 
-        page.enterEmail(email);
-        page.enterPassword(password);
-        page.enterConfirmPassword(confirmPassword);
+        page.enterEmailInput(email);
+        page.enterPasswordInput(password);
+        page.enterConfirmPasswordInput(confirmPassword);
         page.clickRegisterButton();
+
+        Assert.assertEquals(
+                page.getSuccessMessage(),
+                "Registration Successful");
 
     }
 

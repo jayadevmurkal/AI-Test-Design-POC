@@ -1,7 +1,8 @@
 package generator.v2;
 
+import java.io.File;
 import java.io.FileWriter;
-
+import config.FrameworkConstants;
 import model.v2.GeneratedTestCase;
 import model.v2.GeneratedTestSuite;
 
@@ -11,11 +12,12 @@ public class SeleniumCodeGeneratorV2 {
 
         StringBuilder code = new StringBuilder();
 
-        code.append("package tests;\n\n");
+        code.append("import org.testng.Assert;\n");
+        code.append("import org.testng.annotations.Test;\n");
+        code.append("import framework.BaseTest;\n");
+        code.append("import pages.RegistrationPage;\n\n");
 
-        code.append("import org.testng.annotations.Test;\n\n");
-
-        code.append("public class RegistrationTests {\n\n");
+        code.append("public class RegistrationTests extends BaseTest {\n\n");
 
         for (GeneratedTestCase tc : suite.getTestCases()) {
 
@@ -25,8 +27,15 @@ public class SeleniumCodeGeneratorV2 {
 
         code.append("}\n");
 
+        File outputFolder = new File(
+                FrameworkConstants.GENERATED_OUTPUT_FOLDER);
+
+        if (!outputFolder.exists()) {
+            outputFolder.mkdirs();
+        }
+
         FileWriter writer = new FileWriter(
-                "src/main/java/generatedtests/RegistrationTests.java");
+                FrameworkConstants.GENERATED_TEST_OUTPUT);
 
         writer.write(code.toString());
 
@@ -48,7 +57,11 @@ public class SeleniumCodeGeneratorV2 {
                 .append(methodName)
                 .append("() {\n");
         generateTestData(code, tc);
+
         generatePageActions(code);
+
+        generateAssertion(code, tc);
+
         code.append("\n");
         code.append("    }\n\n");
     }
@@ -74,9 +87,9 @@ public class SeleniumCodeGeneratorV2 {
 
         code.append("        RegistrationPage page = new RegistrationPage(driver);\n\n");
 
-        code.append("        page.enterEmail(email);\n");
-        code.append("        page.enterPassword(password);\n");
-        code.append("        page.enterConfirmPassword(confirmPassword);\n");
+        code.append("        page.enterEmailInput(email);\n");
+        code.append("        page.enterPasswordInput(password);\n");
+        code.append("        page.enterConfirmPasswordInput(confirmPassword);\n");
         code.append("        page.clickRegisterButton();\n\n");
     }
 
@@ -110,6 +123,25 @@ public class SeleniumCodeGeneratorV2 {
 
         return method.toString();
 
+    }
+
+    private static void generateAssertion(
+            StringBuilder code,
+            GeneratedTestCase tc) {
+
+        String expected = tc.getExpectedResult();
+
+        if (expected.equalsIgnoreCase("Registration Successful")) {
+
+            code.append("        Assert.assertEquals(\n");
+            code.append("                page.getSuccessMessage(),\n");
+            code.append("                \"Registration Successful\");\n\n");
+
+        } else {
+
+            code.append("        // TODO: Assertion generation not implemented\n\n");
+
+        }
     }
 
 }
