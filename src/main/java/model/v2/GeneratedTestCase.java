@@ -1,7 +1,9 @@
 package model.v2;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GeneratedTestCase {
 
@@ -23,7 +25,7 @@ public class GeneratedTestCase {
 
     private TestData testData;
 
-    private List<String> locators = new ArrayList<>();
+    private Map<String, String> locators = new HashMap<>();
 
     private List<String> tags = new ArrayList<>();
 
@@ -99,11 +101,11 @@ public class GeneratedTestCase {
         this.testData = testData;
     }
 
-    public List<String> getLocators() {
+    public Map<String, String> getLocators() {
         return locators;
     }
 
-    public void setLocators(List<String> locators) {
+    public void setLocators(Map<String, String> locators) {
         this.locators = locators;
     }
 

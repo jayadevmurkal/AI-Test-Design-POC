@@ -1,7 +1,5 @@
 package generator.v2;
 
-import java.io.File;
-import java.io.FileWriter;
 import config.FrameworkConstants;
 import model.v2.GeneratedTestCase;
 import model.v2.GeneratedTestSuite;
@@ -11,14 +9,29 @@ public class SeleniumCodeGeneratorV2 {
     public static void generate(GeneratedTestSuite suite) throws Exception {
 
         StringBuilder code = new StringBuilder();
+        code.append("FrameworkConstants.TEST_PACKAGE;\n\n");
 
         code.append("import org.testng.Assert;\n");
-        code.append("import org.testng.annotations.Test;\n");
+        code.append("import org.testng.annotations.BeforeMethod;\n");
+        code.append("import org.testng.annotations.Test;\n\n");
+
         code.append("import framework.BaseTest;\n");
-        code.append("import pages.RegistrationPage;\n\n");
+        code.append("import framework.LoggerUtil;\n");
 
-        code.append("public class RegistrationTests extends BaseTest {\n\n");
+        code.append("import pages.FrameworkConstants.PAGE_CLASS;\n\n");
 
+        code.append("public class FrameworkConstants.TEST_CLASS extends BaseTest {\n\n");
+
+        // Page Object
+        code.append("    private FrameworkConstants.PAGE_CLASS page;\n\n");
+
+        // BeforeMethod
+        code.append("    @BeforeMethod\n");
+        code.append("    public void initialize() {\n");
+        code.append("        page = new FrameworkConstants.PAGE_CLASS(getDriver());\n");
+        code.append("    }\n\n");
+
+        // Generate all test methods
         for (GeneratedTestCase tc : suite.getTestCases()) {
 
             generateTestMethod(code, tc);
@@ -27,35 +40,29 @@ public class SeleniumCodeGeneratorV2 {
 
         code.append("}\n");
 
-        File outputFolder = new File(
-                FrameworkConstants.GENERATED_OUTPUT_FOLDER);
-
-        if (!outputFolder.exists()) {
-            outputFolder.mkdirs();
-        }
-
-        FileWriter writer = new FileWriter(
-                FrameworkConstants.GENERATED_TEST_OUTPUT);
-
-        writer.write(code.toString());
-
-        writer.close();
-
-        System.out.println("RegistrationTests.java generated successfully.");
-
+        GeneratorFileUtil.writeFile(
+                FrameworkConstants.TEST_PACKAGE,
+                FrameworkConstants.TEST_CLASS + ".java",
+                code.toString());
     }
 
     private static void generateTestMethod(
             StringBuilder code,
             GeneratedTestCase tc) {
 
-        String methodName = toMethodName(tc.getScenario());
+        String methodName = GeneratorStringUtil.toMethodName(tc.getScenario());
 
         code.append("    @Test\n");
 
         code.append("    public void ")
                 .append(methodName)
-                .append("() {\n");
+                .append("() {\n\n");
+
+        // Logger
+        code.append("        LoggerUtil.info(\"Executing Scenario : ")
+                .append(tc.getScenario())
+                .append("\");\n\n");
+
         generateTestData(code, tc);
 
         generatePageActions(code);
@@ -85,63 +92,67 @@ public class SeleniumCodeGeneratorV2 {
 
     private static void generatePageActions(StringBuilder code) {
 
-        code.append("        RegistrationPage page = new RegistrationPage(driver);\n\n");
-
         code.append("        page.enterEmailInput(email);\n");
         code.append("        page.enterPasswordInput(password);\n");
         code.append("        page.enterConfirmPasswordInput(confirmPassword);\n");
         code.append("        page.clickRegisterButton();\n\n");
     }
 
-    private static String toMethodName(String scenario) {
-
-        String cleaned = scenario
-                .replaceAll("[^a-zA-Z0-9 ]", "")
-                .trim();
-
-        String[] words = cleaned.split("\\s+");
-
-        StringBuilder method = new StringBuilder();
-
-        for (int i = 0; i < words.length; i++) {
-
-            String word = words[i];
-
-            if (i == 0) {
-
-                method.append(word.substring(0, 1).toLowerCase())
-                        .append(word.substring(1));
-
-            } else {
-
-                method.append(word.substring(0, 1).toUpperCase())
-                        .append(word.substring(1));
-
-            }
-
-        }
-
-        return method.toString();
-
-    }
-
     private static void generateAssertion(
             StringBuilder code,
             GeneratedTestCase tc) {
 
-        String expected = tc.getExpectedResult();
+        String assertionMethod = getAssertionMethod(tc);
 
-        if (expected.equalsIgnoreCase("Registration Successful")) {
+        code.append("        Assert.assertEquals(\n");
 
-            code.append("        Assert.assertEquals(\n");
-            code.append("                page.getSuccessMessage(),\n");
-            code.append("                \"Registration Successful\");\n\n");
+        code.append("                page.")
+                .append(assertionMethod)
+                .append("(),\n");
 
-        } else {
+        code.append("                \"")
+                .append(tc.getExpectedResult())
+                .append("\");\n\n");
 
-            code.append("        // TODO: Assertion generation not implemented\n\n");
+    }
 
+    private static String getAssertionMethod(GeneratedTestCase tc) {
+
+        String expected = tc.getExpectedResult().toLowerCase();
+
+        if (expected.contains("successful")) {
+            return "getSuccessMessage";
         }
+
+        if (expected.contains("already exists")) {
+            return "getEmailExistsErrorMessage";
+        }
+
+        if (expected.contains("invalid email")) {
+            return "getInvalidEmailFormatErrorMessage";
+        }
+
+        if (expected.contains("minimum 8")) {
+            return "getPasswordLengthErrorMessage";
+        }
+
+        if (expected.contains("uppercase")) {
+            return "getPasswordUppercaseErrorMessage";
+        }
+
+        if (expected.contains("lowercase")) {
+            return "getPasswordLowercaseErrorMessage";
+        }
+
+        if (expected.contains("special")) {
+            return "getPasswordSpecialCharErrorMessage";
+        }
+
+        if (expected.contains("match")) {
+            return "getPasswordMismatchErrorMessage";
+        }
+
+        return "getSuccessMessage";
     }
 
 }

@@ -16,16 +16,119 @@
                 "password": "Password123!",
                 "confirmPassword": "Password123!"
             },
-            "locators": [
-                "EMAIL_INPUT",
-                "PASSWORD_INPUT",
-                "CONFIRM_PASSWORD_INPUT",
-                "REGISTER_BUTTON",
-                "SUCCESS_MESSAGE"
-            ],
+            "locators": {
+                "emailInput": "name=email",
+                "passwordInput": "id=password",
+                "confirmPasswordInput": "xpath=//input[@id='confirmPassword']",
+                "registerButton": "id=registerButton",
+                "successMessage": "className=success-message"
+            },
             "tags": [
                 "Smoke",
                 "Regression"
+            ]
+        },
+        {
+            "id": "TC002",
+            "testType": "UI",
+            "category": "Negative",
+            "priority": "High",
+            "automation": true,
+            "scenario": "Register with existing email",
+            "precondition": "User already exists",
+            "expectedResult": "Email already exists",
+            "testData": {
+                "email": "existing@example.com",
+                "password": "Password123!",
+                "confirmPassword": "Password123!"
+            },
+            "locators": {
+                "emailInput": "name=email",
+                "passwordInput": "id=password",
+                "confirmPasswordInput": "xpath=//input[@id='confirmPassword']",
+                "registerButton": "id=registerButton",
+                "emailExistsErrorMessage": "id=emailExistsError"
+            },
+            "tags": [
+                "Regression",
+                "Negative"
+            ]
+        },
+        {
+            "id": "TC003",
+            "testType": "UI",
+            "category": "Validation",
+            "priority": "Medium",
+            "automation": true,
+            "scenario": "Register with invalid email format",
+            "precondition": "Registration page is open",
+            "expectedResult": "Invalid email format",
+            "testData": {
+                "email": "invalid-email",
+                "password": "Password123!",
+                "confirmPassword": "Password123!"
+            },
+            "locators": {
+                "emailInput": "name=email",
+                "passwordInput": "id=password",
+                "confirmPasswordInput": "xpath=//input[@id='confirmPassword']",
+                "registerButton": "id=registerButton",
+                "invalidEmailFormatErrorMessage": "id=invalidEmailFormatError"
+            },
+            "tags": [
+                "Validation"
+            ]
+        },
+        {
+            "id": "TC004",
+            "testType": "UI",
+            "category": "Boundary",
+            "priority": "High",
+            "automation": true,
+            "scenario": "Register with password less than 8 characters",
+            "precondition": "Registration page is open",
+            "expectedResult": "Password should contain minimum 8 characters",
+            "testData": {
+                "email": "boundary@example.com",
+                "password": "Pass1!",
+                "confirmPassword": "Pass1!"
+            },
+            "locators": {
+                "emailInput": "name=email",
+                "passwordInput": "id=password",
+                "confirmPasswordInput": "xpath=//input[@id='confirmPassword']",
+                "registerButton": "id=registerButton",
+                "passwordLengthErrorMessage": "id=passwordLengthError"
+            },
+            "tags": [
+                "Boundary",
+                "Regression"
+            ]
+        },
+        {
+            "id": "TC005",
+            "testType": "UI",
+            "category": "Negative",
+            "priority": "High",
+            "automation": true,
+            "scenario": "Register with password mismatch",
+            "precondition": "Registration page is open",
+            "expectedResult": "Passwords do not match",
+            "testData": {
+                "email": "mismatch@example.com",
+                "password": "Password123!",
+                "confirmPassword": "Password321!"
+            },
+            "locators": {
+                "emailInput": "name=email",
+                "passwordInput": "id=password",
+                "confirmPasswordInput": "xpath=//input[@id='confirmPassword']",
+                "registerButton": "id=registerButton",
+                "passwordMismatchErrorMessage": "id=passwordMismatchError"
+            },
+            "tags": [
+                "Regression",
+                "Negative"
             ]
         }
     ]

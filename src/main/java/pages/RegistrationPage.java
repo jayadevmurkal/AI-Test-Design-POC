@@ -9,46 +9,46 @@ public class RegistrationPage {
 
     private WebDriver driver;
 
-    @FindBy(id = "email")
+    @FindBy(id="email")
     private WebElement emailInput;
 
-    @FindBy(id = "password")
+    @FindBy(id="password")
     private WebElement passwordInput;
 
-    @FindBy(id = "confirmPassword")
+    @FindBy(id="confirmPassword")
     private WebElement confirmPasswordInput;
 
-    @FindBy(id = "registerButton")
+    @FindBy(id="registerButton")
     private WebElement registerButton;
 
-    @FindBy(id = "successMessage")
+    @FindBy(id="successMessage")
     private WebElement successMessage;
 
-    @FindBy(id = "emailExistsError")
+    @FindBy(id="emailExistsError")
     private WebElement emailExistsErrorMessage;
 
-    @FindBy(id = "passwordLengthError")
+    @FindBy(id="passwordLengthError")
     private WebElement passwordLengthErrorMessage;
 
-    @FindBy(id = "passwordUppercaseError")
+    @FindBy(id="passwordUppercaseError")
     private WebElement passwordUppercaseErrorMessage;
 
-    @FindBy(id = "passwordLowercaseError")
+    @FindBy(id="passwordLowercaseError")
     private WebElement passwordLowercaseErrorMessage;
 
-    @FindBy(id = "passwordSpecialCharError")
+    @FindBy(id="passwordSpecialCharError")
     private WebElement passwordSpecialCharErrorMessage;
 
-    @FindBy(id = "invalidEmailFormatError")
+    @FindBy(id="invalidEmailFormatError")
     private WebElement invalidEmailFormatErrorMessage;
 
-    @FindBy(id = "emptyEmailError")
+    @FindBy(id="emptyEmailError")
     private WebElement emptyEmailErrorMessage;
 
-    @FindBy(id = "emptyPasswordError")
+    @FindBy(id="emptyPasswordError")
     private WebElement emptyPasswordErrorMessage;
 
-    @FindBy(id = "passwordMismatchError")
+    @FindBy(id="passwordMismatchError")
     private WebElement passwordMismatchErrorMessage;
 
     public RegistrationPage(WebDriver driver) {

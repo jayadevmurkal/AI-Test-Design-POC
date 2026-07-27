@@ -54,11 +54,24 @@ Use the following JSON structure EXACTLY.
   ]
 }
 
-Generate:
+Generate at least 5 test cases covering:
 
-• Positive test cases
-• Negative test cases
-• Edge test cases
+1. Positive scenario
+2. Negative scenario
+3. Boundary scenario
+4. Validation scenario
+5. Edge case
+
+Each test case should include:
+- id
+- scenario
+- expectedResult
+- priority
+- category
+- automation
+- testData
+- locators
+- tags
 
 Requirement:
 
