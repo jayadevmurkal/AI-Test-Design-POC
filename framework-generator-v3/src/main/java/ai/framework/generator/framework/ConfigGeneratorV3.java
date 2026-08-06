@@ -6,8 +6,6 @@ import ai.framework.model.GeneratedFile;
 
 public class ConfigGeneratorV3 implements Generator {
 
-    private GeneratedFile generatedFile;
-
     @Override
     public void generate(FrameworkProject project) throws Exception {
 
@@ -18,15 +16,12 @@ public class ConfigGeneratorV3 implements Generator {
         buildTimeouts(code);
         buildExecutionSettings(code);
 
-        generatedFile = new GeneratedFile(
+        GeneratedFile file = new GeneratedFile(
                 "config",
                 "config.properties",
                 code.toString());
 
-    }
-
-    public GeneratedFile getGeneratedFile() {
-        return generatedFile;
+        project.addFile(file);
     }
 
     private void buildBrowser(StringBuilder code) {
@@ -37,7 +32,9 @@ public class ConfigGeneratorV3 implements Generator {
 
     private void buildApplicationUrl(StringBuilder code) {
 
-        code.append("url=https://example.com\n\n");
+        code.append(
+                "url=data:text/html,<html><head><title>Sample Page</title></head>"
+                        + "<body><h1>Example%20Domain</h1></body></html>\n\n");
 
     }
 

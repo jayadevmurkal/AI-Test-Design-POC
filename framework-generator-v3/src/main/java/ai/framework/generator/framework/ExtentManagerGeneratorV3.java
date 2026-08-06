@@ -40,6 +40,9 @@ public class ExtentManagerGeneratorV3 implements Generator {
         code.append("import java.time.LocalDateTime;\n");
         code.append("import java.time.format.DateTimeFormatter;\n\n");
 
+        code.append("import java.nio.file.Files;\n");
+        code.append("import java.nio.file.Paths;\n");
+
     }
 
     private void buildClassStart(StringBuilder code) {
@@ -82,6 +85,12 @@ public class ExtentManagerGeneratorV3 implements Generator {
         code.append("                    .format(DateTimeFormatter.ofPattern(\"yyyyMMdd_HHmmss\"));\n\n");
 
         code.append("            String reportPath = \"reports/ExtentReport_\" + timestamp + \".html\";\n\n");
+
+        code.append("            try {\n");
+        code.append("                Files.createDirectories(Paths.get(\"reports\"));\n");
+        code.append("            } catch (Exception e) {\n");
+        code.append("                throw new RuntimeException(\"Unable to create reports directory\", e);\n");
+        code.append("            }\n\n");
 
         code.append("            ExtentSparkReporter spark = new ExtentSparkReporter(reportPath);\n\n");
 

@@ -6,8 +6,6 @@ import ai.framework.model.GeneratedFile;
 
 public class PageGeneratorV3 implements Generator {
 
-    private GeneratedFile generatedFile;
-
     @Override
     public void generate(FrameworkProject project) throws Exception {
 
@@ -21,14 +19,12 @@ public class PageGeneratorV3 implements Generator {
         buildActions(code);
         buildClassEnd(code);
 
-        generatedFile = new GeneratedFile(
-                "framework",
+        GeneratedFile file = new GeneratedFile(
+                "pages",
                 "SamplePage.java",
                 code.toString());
-    }
 
-    public GeneratedFile getGeneratedFile() {
-        return generatedFile;
+        project.addFile(file);
     }
 
     private void buildPackage(StringBuilder code) {
@@ -42,9 +38,7 @@ public class PageGeneratorV3 implements Generator {
         code.append("import org.openqa.selenium.By;\n");
         code.append("import org.openqa.selenium.WebDriver;\n\n");
 
-        code.append("import framework.BasePage;\n");
-        code.append("import framework.WaitUtil;\n");
-        code.append("import framework.LoggerUtil;\n\n");
+        code.append("import framework.BasePage;\n\n");
 
     }
 
@@ -56,28 +50,22 @@ public class PageGeneratorV3 implements Generator {
 
     private void buildLocators(StringBuilder code) {
 
-        code.append("    // Page Locators\n\n");
-
-        code.append("    private By sampleLocator = By.id(\"sample\");\n\n");
+        code.append("    private final By pageHeading = By.tagName(\"h1\");\n\n");
 
     }
 
     private void buildConstructor(StringBuilder code) {
 
         code.append("    public SamplePage(WebDriver driver) {\n");
-
         code.append("        super(driver);\n");
-
         code.append("    }\n\n");
 
     }
 
     private void buildActions(StringBuilder code) {
 
-        code.append("    public void sampleAction() {\n\n");
-
-        code.append("        click(sampleLocator);\n\n");
-
+        code.append("    public String getPageHeading() {\n\n");
+        code.append("        return getText(pageHeading);\n\n");
         code.append("    }\n\n");
 
     }

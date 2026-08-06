@@ -6,8 +6,6 @@ import ai.framework.model.GeneratedFile;
 
 public class READMEGeneratorV3 implements Generator {
 
-    private GeneratedFile generatedFile;
-
     @Override
     public void generate(FrameworkProject project) throws Exception {
 
@@ -18,15 +16,12 @@ public class READMEGeneratorV3 implements Generator {
         buildProjectStructure(code);
         buildExecutionSteps(code);
 
-        generatedFile = new GeneratedFile(
+        GeneratedFile file = new GeneratedFile(
                 "",
                 "README.md",
                 code.toString());
 
-    }
-
-    public GeneratedFile getGeneratedFile() {
-        return generatedFile;
+        project.addFile(file);
     }
 
     private void buildTitle(StringBuilder code) {
@@ -39,7 +34,8 @@ public class READMEGeneratorV3 implements Generator {
 
         code.append("## Overview\n\n");
 
-        code.append("This project is a Selenium Test Automation Framework generated using Framework Generator V3.\n\n");
+        code.append(
+                "This project is a Selenium Test Automation Framework generated using Framework Generator V3.\n\n");
 
         code.append(
                 "The framework follows the Page Object Model (POM) design pattern and includes reusable utilities for browser management, reporting, logging, screenshots, waits, and configuration.\n\n");
@@ -52,12 +48,31 @@ public class READMEGeneratorV3 implements Generator {
 
         code.append("```text\n");
 
-        code.append("src\n");
-        code.append(" ├── framework\n");
-        code.append(" ├── pages\n");
-        code.append(" ├── tests\n");
-        code.append(" ├── config\n");
-        code.append(" └── resources\n");
+        code.append("generated-output/\n");
+        code.append("|-- config/\n");
+        code.append("|   |-- config.properties\n");
+        code.append("|   `-- ConfigReader.java\n");
+        code.append("|\n");
+        code.append("|-- framework/\n");
+        code.append("|   |-- BasePage.java\n");
+        code.append("|   |-- BaseTest.java\n");
+        code.append("|   |-- DriverFactory.java\n");
+        code.append("|   |-- ExtentListener.java\n");
+        code.append("|   |-- ExtentManager.java\n");
+        code.append("|   |-- ExtentTestManager.java\n");
+        code.append("|   |-- LoggerUtil.java\n");
+        code.append("|   |-- ScreenshotUtil.java\n");
+        code.append("|   `-- WaitUtil.java\n");
+        code.append("|\n");
+        code.append("|-- pages/\n");
+        code.append("|   `-- SamplePage.java\n");
+        code.append("|\n");
+        code.append("|-- tests/\n");
+        code.append("|   `-- SampleTest.java\n");
+        code.append("|\n");
+        code.append("|-- pom.xml\n");
+        code.append("|-- testng.xml\n");
+        code.append("`-- README.md\n");
 
         code.append("```\n\n");
 
@@ -67,15 +82,14 @@ public class READMEGeneratorV3 implements Generator {
 
         code.append("## Execute Tests\n\n");
 
-        code.append("Run the following command:\n\n");
+        code.append("Run the following command from the generated framework directory:\n\n");
 
         code.append("```bash\n");
-
         code.append("mvn clean test\n");
-
         code.append("```\n\n");
 
-        code.append("Reports will be generated automatically after execution.\n");
+        code.append(
+                "Extent reports will be generated inside the reports directory after execution.\n");
 
     }
 

@@ -6,8 +6,6 @@ import ai.framework.model.GeneratedFile;
 
 public class TestNGGeneratorV3 implements Generator {
 
-    private GeneratedFile generatedFile;
-
     @Override
     public void generate(FrameworkProject project) throws Exception {
 
@@ -15,19 +13,18 @@ public class TestNGGeneratorV3 implements Generator {
 
         buildXmlStart(code);
         buildSuite(code);
+        buildListeners(code);
         buildTest(code);
         buildClasses(code);
         buildXmlEnd(code);
 
-        generatedFile = new GeneratedFile(
+        GeneratedFile file = new GeneratedFile(
                 "",
                 "testng.xml",
                 code.toString());
 
-    }
+        project.addFile(file);
 
-    public GeneratedFile getGeneratedFile() {
-        return generatedFile;
     }
 
     private void buildXmlStart(StringBuilder code) {
@@ -39,6 +36,17 @@ public class TestNGGeneratorV3 implements Generator {
     private void buildSuite(StringBuilder code) {
 
         code.append("<suite name=\"Automation Suite\">\n\n");
+
+    }
+
+    private void buildListeners(StringBuilder code) {
+
+        code.append("    <listeners>\n");
+
+        code.append(
+                "        <listener class-name=\"framework.ExtentListener\"/>\n");
+
+        code.append("    </listeners>\n\n");
 
     }
 

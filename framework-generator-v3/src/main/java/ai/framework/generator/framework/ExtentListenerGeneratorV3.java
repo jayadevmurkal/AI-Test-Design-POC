@@ -23,7 +23,6 @@ public class ExtentListenerGeneratorV3 implements Generator {
                 code.toString());
 
         project.addFile(file);
-
     }
 
     private void buildPackage(StringBuilder code) {
@@ -61,12 +60,14 @@ public class ExtentListenerGeneratorV3 implements Generator {
     private void buildOnStart(StringBuilder code) {
 
         code.append("    @Override\n");
-
         code.append("    public void onTestStart(ITestResult result) {\n\n");
 
-        code.append("        ExtentTestManager.startTest(result.getMethod().getMethodName());\n\n");
+        code.append("        ExtentTestManager.startTest(\n");
+        code.append("                result.getMethod().getMethodName());\n\n");
 
-        code.append("        LoggerUtil.info(\"Starting Test : \" + result.getMethod().getMethodName());\n\n");
+        code.append("        LoggerUtil.info(\n");
+        code.append("                \"Starting Test : \"\n");
+        code.append("                        + result.getMethod().getMethodName());\n\n");
 
         code.append("    }\n\n");
 
@@ -75,12 +76,16 @@ public class ExtentListenerGeneratorV3 implements Generator {
     private void buildOnSuccess(StringBuilder code) {
 
         code.append("    @Override\n");
-
         code.append("    public void onTestSuccess(ITestResult result) {\n\n");
 
-        code.append("        ExtentTestManager.getTest().log(Status.PASS, \"Test Passed\");\n\n");
+        code.append("        ExtentTestManager.getTest()\n");
+        code.append("                .log(Status.PASS, \"Test Passed\");\n\n");
 
-        code.append("        LoggerUtil.info(\"Test Passed : \" + result.getMethod().getMethodName());\n\n");
+        code.append("        LoggerUtil.info(\n");
+        code.append("                \"Test Passed : \"\n");
+        code.append("                        + result.getMethod().getMethodName());\n\n");
+
+        code.append("        ExtentTestManager.unload();\n\n");
 
         code.append("    }\n\n");
 
@@ -89,12 +94,14 @@ public class ExtentListenerGeneratorV3 implements Generator {
     private void buildOnFailure(StringBuilder code) {
 
         code.append("    @Override\n");
-
         code.append("    public void onTestFailure(ITestResult result) {\n\n");
 
-        code.append("        ExtentTestManager.getTest().log(Status.FAIL, result.getThrowable());\n\n");
+        code.append("        ExtentTestManager.getTest()\n");
+        code.append("                .log(Status.FAIL, result.getThrowable());\n\n");
 
-        code.append("        LoggerUtil.error(\"Test Failed : \" + result.getMethod().getMethodName());\n\n");
+        code.append("        LoggerUtil.error(\n");
+        code.append("                \"Test Failed : \"\n");
+        code.append("                        + result.getMethod().getMethodName());\n\n");
 
         code.append("        try {\n\n");
 
@@ -102,13 +109,22 @@ public class ExtentListenerGeneratorV3 implements Generator {
         code.append("                    DriverFactory.getDriver(),\n");
         code.append("                    result.getMethod().getMethodName());\n\n");
 
-        code.append("            ExtentTestManager.getTest().addScreenCaptureFromPath(screenshot);\n\n");
+        code.append("            if (screenshot != null) {\n\n");
+
+        code.append("                ExtentTestManager.getTest()\n");
+        code.append("                        .addScreenCaptureFromPath(screenshot);\n\n");
+
+        code.append("            }\n\n");
 
         code.append("        } catch (Exception e) {\n\n");
 
-        code.append("            LoggerUtil.error(\"Unable to attach screenshot : \" + e.getMessage());\n\n");
+        code.append("            LoggerUtil.error(\n");
+        code.append("                    \"Unable to attach screenshot : \"\n");
+        code.append("                            + e.getMessage());\n\n");
 
         code.append("        }\n\n");
+
+        code.append("        ExtentTestManager.unload();\n\n");
 
         code.append("    }\n\n");
 
@@ -117,12 +133,16 @@ public class ExtentListenerGeneratorV3 implements Generator {
     private void buildOnSkipped(StringBuilder code) {
 
         code.append("    @Override\n");
-
         code.append("    public void onTestSkipped(ITestResult result) {\n\n");
 
-        code.append("        ExtentTestManager.getTest().log(Status.SKIP, \"Test Skipped\");\n\n");
+        code.append("        ExtentTestManager.getTest()\n");
+        code.append("                .log(Status.SKIP, \"Test Skipped\");\n\n");
 
-        code.append("        LoggerUtil.info(\"Test Skipped : \" + result.getMethod().getMethodName());\n\n");
+        code.append("        LoggerUtil.info(\n");
+        code.append("                \"Test Skipped : \"\n");
+        code.append("                        + result.getMethod().getMethodName());\n\n");
+
+        code.append("        ExtentTestManager.unload();\n\n");
 
         code.append("    }\n\n");
 
@@ -131,12 +151,9 @@ public class ExtentListenerGeneratorV3 implements Generator {
     private void buildOnFinish(StringBuilder code) {
 
         code.append("    @Override\n");
-
         code.append("    public void onFinish(ITestContext context) {\n\n");
 
-        code.append("        ExtentManager.getInstance().flush();\n");
-
-        code.append("        ExtentTestManager.unload();\n\n");
+        code.append("        ExtentManager.getInstance().flush();\n\n");
 
         code.append("        LoggerUtil.info(\"Execution Completed\");\n\n");
 

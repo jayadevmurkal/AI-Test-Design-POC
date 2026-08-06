@@ -34,8 +34,7 @@ public class ConfigReaderGeneratorV3 implements Generator {
 
     private void buildImports(StringBuilder code) {
 
-        code.append("import java.io.FileInputStream;\n");
-        code.append("import java.io.IOException;\n");
+        code.append("import java.io.InputStream;\n");
         code.append("import java.util.Properties;\n\n");
 
     }
@@ -54,16 +53,21 @@ public class ConfigReaderGeneratorV3 implements Generator {
 
         code.append("        try {\n\n");
 
-        code.append(
-                "            FileInputStream file = new FileInputStream(\"src/main/resources/config.properties\");\n");
+        code.append("            InputStream file = ConfigReader.class\n");
+        code.append("                    .getClassLoader()\n");
+        code.append("                    .getResourceAsStream(\"config.properties\");\n\n");
 
-        code.append("            properties.load(file);\n");
+        code.append("            if (file == null) {\n");
+        code.append("                throw new RuntimeException(\"config.properties not found\");\n");
+        code.append("            }\n\n");
 
-        code.append("        }\n");
+        code.append("            properties.load(file);\n\n");
 
-        code.append("        catch (IOException e) {\n");
+        code.append("        } catch (Exception e) {\n\n");
 
-        code.append("            throw new RuntimeException(\"Unable to load config.properties\", e);\n");
+        code.append("            throw new RuntimeException(\n");
+        code.append("                    \"Unable to load config.properties\",\n");
+        code.append("                    e);\n\n");
 
         code.append("        }\n\n");
 

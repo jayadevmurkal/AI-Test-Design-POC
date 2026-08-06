@@ -13,6 +13,7 @@ public class BasePageGeneratorV3 implements Generator {
 
         code.append("package framework;\n\n");
 
+        code.append("import org.openqa.selenium.By;\n");
         code.append("import org.openqa.selenium.WebDriver;\n");
         code.append("import org.openqa.selenium.WebElement;\n\n");
 
@@ -24,9 +25,18 @@ public class BasePageGeneratorV3 implements Generator {
         code.append("        this.driver = driver;\n");
         code.append("    }\n\n");
 
-        code.append("    protected void type(WebElement element, String value) {\n");
+        code.append("    protected void click(By locator) {\n");
+        code.append("        driver.findElement(locator).click();\n");
+        code.append("    }\n\n");
+
+        code.append("    protected void type(By locator, String value) {\n");
+        code.append("        WebElement element = driver.findElement(locator);\n");
         code.append("        element.clear();\n");
         code.append("        element.sendKeys(value);\n");
+        code.append("    }\n\n");
+
+        code.append("    protected String getText(By locator) {\n");
+        code.append("        return driver.findElement(locator).getText();\n");
         code.append("    }\n\n");
 
         code.append("}\n");

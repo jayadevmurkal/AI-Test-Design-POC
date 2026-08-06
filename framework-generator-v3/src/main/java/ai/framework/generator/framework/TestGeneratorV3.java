@@ -6,8 +6,6 @@ import ai.framework.model.GeneratedFile;
 
 public class TestGeneratorV3 implements Generator {
 
-    private GeneratedFile generatedFile;
-
     @Override
     public void generate(FrameworkProject project) throws Exception {
 
@@ -19,14 +17,12 @@ public class TestGeneratorV3 implements Generator {
         buildTestMethod(code);
         buildClassEnd(code);
 
-        generatedFile = new GeneratedFile(
+        GeneratedFile file = new GeneratedFile(
                 "tests",
                 "SampleTest.java",
                 code.toString());
-    }
 
-    public GeneratedFile getGeneratedFile() {
-        return generatedFile;
+        project.addFile(file);
     }
 
     private void buildPackage(StringBuilder code) {
@@ -37,6 +33,7 @@ public class TestGeneratorV3 implements Generator {
 
     private void buildImports(StringBuilder code) {
 
+        code.append("import org.testng.Assert;\n");
         code.append("import org.testng.annotations.Test;\n\n");
 
         code.append("import framework.BaseTest;\n");
@@ -53,12 +50,16 @@ public class TestGeneratorV3 implements Generator {
     private void buildTestMethod(StringBuilder code) {
 
         code.append("    @Test\n");
-
         code.append("    public void sampleTest() {\n\n");
 
         code.append("        SamplePage page = new SamplePage(driver);\n\n");
 
-        code.append("        page.sampleAction();\n\n");
+        code.append("        String actualHeading = page.getPageHeading();\n\n");
+
+        code.append("        Assert.assertEquals(\n");
+        code.append("                actualHeading,\n");
+        code.append("                \"Example Domain\",\n");
+        code.append("                \"Page heading did not match\");\n\n");
 
         code.append("    }\n\n");
 

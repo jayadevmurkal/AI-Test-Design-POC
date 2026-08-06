@@ -6,8 +6,6 @@ import ai.framework.model.GeneratedFile;
 
 public class PomGeneratorV3 implements Generator {
 
-    private GeneratedFile generatedFile;
-
     @Override
     public void generate(FrameworkProject project) throws Exception {
 
@@ -20,15 +18,12 @@ public class PomGeneratorV3 implements Generator {
         buildBuildPlugins(code);
         buildXmlEnd(code);
 
-        generatedFile = new GeneratedFile(
+        GeneratedFile file = new GeneratedFile(
                 "",
                 "pom.xml",
                 code.toString());
 
-    }
-
-    public GeneratedFile getGeneratedFile() {
-        return generatedFile;
+        project.addFile(file);
     }
 
     private void buildXmlStart(StringBuilder code) {
@@ -42,7 +37,6 @@ public class PomGeneratorV3 implements Generator {
         code.append("         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 ");
 
         code.append("https://maven.apache.org/xsd/maven-4.0.0.xsd\">\n\n");
-
     }
 
     private void buildProject(StringBuilder code) {
@@ -54,7 +48,6 @@ public class PomGeneratorV3 implements Generator {
         code.append("    <artifactId>generated-framework</artifactId>\n");
 
         code.append("    <version>1.0.0</version>\n\n");
-
     }
 
     private void buildProperties(StringBuilder code) {
@@ -68,7 +61,6 @@ public class PomGeneratorV3 implements Generator {
         code.append("        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n");
 
         code.append("    </properties>\n\n");
-
     }
 
     private void buildDependencies(StringBuilder code) {
@@ -85,7 +77,6 @@ public class PomGeneratorV3 implements Generator {
         code.append("            <groupId>org.testng</groupId>\n");
         code.append("            <artifactId>testng</artifactId>\n");
         code.append("            <version>7.10.2</version>\n");
-        code.append("            <scope>test</scope>\n");
         code.append("        </dependency>\n\n");
 
         code.append("        <dependency>\n");
@@ -100,14 +91,7 @@ public class PomGeneratorV3 implements Generator {
         code.append("            <version>5.1.2</version>\n");
         code.append("        </dependency>\n\n");
 
-        code.append("        <dependency>\n");
-        code.append("            <groupId>commons-io</groupId>\n");
-        code.append("            <artifactId>commons-io</artifactId>\n");
-        code.append("            <version>2.17.0</version>\n");
-        code.append("        </dependency>\n\n");
-
         code.append("    </dependencies>\n\n");
-
     }
 
     private void buildBuildPlugins(StringBuilder code) {
@@ -119,19 +103,23 @@ public class PomGeneratorV3 implements Generator {
         code.append("            <plugin>\n");
         code.append("                <groupId>org.apache.maven.plugins</groupId>\n");
         code.append("                <artifactId>maven-surefire-plugin</artifactId>\n");
-        code.append("                <version>3.2.5</version>\n");
+        code.append("                <version>3.2.5</version>\n\n");
+
+        code.append("                <configuration>\n");
+        code.append("                    <suiteXmlFiles>\n");
+        code.append("                        <suiteXmlFile>testng.xml</suiteXmlFile>\n");
+        code.append("                    </suiteXmlFiles>\n");
+        code.append("                </configuration>\n\n");
+
         code.append("            </plugin>\n\n");
 
         code.append("        </plugins>\n");
 
         code.append("    </build>\n\n");
-
     }
 
     private void buildXmlEnd(StringBuilder code) {
 
         code.append("</project>\n");
-
     }
-
 }
