@@ -1,0 +1,28 @@
+# Maven
+target/
+
+# Generated framework output
+generated-output/
+
+# Reports
+reports/
+logs/
+
+# Log files
+*.log
+
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# Operating system files
+.DS_Store
+Thumbs.db
