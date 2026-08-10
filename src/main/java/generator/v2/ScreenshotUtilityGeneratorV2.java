@@ -100,7 +100,7 @@ public class ScreenshotUtilityGeneratorV2 {
     private static void writeFile(StringBuilder code) throws Exception {
 
         GeneratorFileUtil.writeFile(
-                "framework",
+                "src/main/java/framework",
                 "ScreenshotUtil.java",
                 code.toString());
 

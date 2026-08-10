@@ -26,6 +26,8 @@ public class FrameworkConstants {
 
     public static final String BASE_URL = "file:///C:/Users/lenovo/.gemini/antigravity-ide/scratch/AI-Test-Design-POC/sample-registration-app/index.html";
 
+    public static final String GITIGNORE_FILE = ".gitignore";
+
     // =========================
     // Project Information
     // =========================

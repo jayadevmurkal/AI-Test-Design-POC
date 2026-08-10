@@ -5,6 +5,8 @@ import model.v2.GeneratedTestSuite;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import config.FrameworkConstants;
+
 public class FrameworkGenerationReportGeneratorV2 {
 
     public static void generate(GeneratedTestSuite suite) throws Exception {
@@ -17,7 +19,7 @@ public class FrameworkGenerationReportGeneratorV2 {
 
         GeneratorFileUtil.writeFile(
                 "",
-                "FrameworkConstants.GENERATION_REPORT_FILE",
+                FrameworkConstants.GENERATION_REPORT_FILE,
                 code.toString());
     }
 
@@ -62,7 +64,9 @@ public class FrameworkGenerationReportGeneratorV2 {
 
         addRow(code, "Feature", suite.getFeature());
         addRow(code, "Requirement", suite.getRequirement());
-        addRow(code, "Framework Version", "2.0");
+        addRow(code,
+                "Framework Version",
+                FrameworkConstants.FRAMEWORK_VERSION);
         addRow(code, "Generated Tests",
                 String.valueOf(suite.getTestCases().size()));
 

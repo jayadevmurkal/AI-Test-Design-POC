@@ -9,7 +9,9 @@ public class SeleniumCodeGeneratorV2 {
     public static void generate(GeneratedTestSuite suite) throws Exception {
 
         StringBuilder code = new StringBuilder();
-        code.append("FrameworkConstants.TEST_PACKAGE;\n\n");
+        code.append("package ")
+                .append(FrameworkConstants.TEST_PACKAGE)
+                .append(";\n\n");
 
         code.append("import org.testng.Assert;\n");
         code.append("import org.testng.annotations.BeforeMethod;\n");
@@ -18,17 +20,27 @@ public class SeleniumCodeGeneratorV2 {
         code.append("import framework.BaseTest;\n");
         code.append("import framework.LoggerUtil;\n");
 
-        code.append("import pages.FrameworkConstants.PAGE_CLASS;\n\n");
+        code.append("import ")
+                .append(FrameworkConstants.PAGE_PACKAGE)
+                .append(".")
+                .append(FrameworkConstants.PAGE_CLASS)
+                .append(";\n\n");
 
-        code.append("public class FrameworkConstants.TEST_CLASS extends BaseTest {\n\n");
+        code.append("public class ")
+                .append(FrameworkConstants.TEST_CLASS)
+                .append(" extends BaseTest {\n\n");
 
         // Page Object
-        code.append("    private FrameworkConstants.PAGE_CLASS page;\n\n");
+        code.append("    private ")
+                .append(FrameworkConstants.PAGE_CLASS)
+                .append(" page;\n\n");
 
         // BeforeMethod
         code.append("    @BeforeMethod\n");
         code.append("    public void initialize() {\n");
-        code.append("        page = new FrameworkConstants.PAGE_CLASS(getDriver());\n");
+        code.append("        page = new ")
+                .append(FrameworkConstants.PAGE_CLASS)
+                .append("(getDriver());\n");
         code.append("    }\n\n");
 
         // Generate all test methods
@@ -40,7 +52,7 @@ public class SeleniumCodeGeneratorV2 {
 
         code.append("}\n");
 
-        GeneratorFileUtil.writeFile(
+        GeneratorFileUtil.writeTestFile(
                 FrameworkConstants.TEST_PACKAGE,
                 FrameworkConstants.TEST_CLASS + ".java",
                 code.toString());

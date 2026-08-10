@@ -2,9 +2,6 @@ package generator.v2;
 
 import config.FrameworkConstants;
 
-import java.io.File;
-import java.io.FileWriter;
-
 public class ExtentReportGeneratorV2 {
 
     public static void generate() throws Exception {
@@ -50,7 +47,9 @@ public class ExtentReportGeneratorV2 {
         code.append("        if (extent == null) {\n\n");
 
         code.append("            ExtentSparkReporter spark =\n");
-        code.append("                    new ExtentSparkReporter(\"reports/ExtentReport.html\");\n\n");
+        code.append("                    new ExtentSparkReporter(\"")
+                .append(FrameworkConstants.EXTENT_REPORT)
+                .append("\");\n\n");
 
         code.append("            extent = new ExtentReports();\n");
         code.append("            extent.attachReporter(spark);\n\n");
@@ -73,20 +72,10 @@ public class ExtentReportGeneratorV2 {
 
     private static void writeFile(StringBuilder code) throws Exception {
 
-        File folder = new File(
-                FrameworkConstants.GENERATED_OUTPUT_FOLDER + "/framework");
-
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        FileWriter writer = new FileWriter(
-                FrameworkConstants.GENERATED_OUTPUT_FOLDER
-                        + "/framework/ExtentManager.java");
-
-        writer.write(code.toString());
-
-        writer.close();
+        GeneratorFileUtil.writeFile(
+                "src/main/java/framework",
+                "ExtentManager.java",
+                code.toString());
 
     }
 

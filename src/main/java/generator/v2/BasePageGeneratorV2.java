@@ -1,13 +1,5 @@
 package generator.v2;
 
-import config.FrameworkConstants;
-
-import java.io.File;
-import java.io.FileWriter;
-
-import org.openqa.selenium.support.ui.WebDriverWait;
-import generator.v2.GeneratorFileUtil;
-
 public class BasePageGeneratorV2 {
 
     public static void generate() throws Exception {
@@ -63,7 +55,7 @@ public class BasePageGeneratorV2 {
 
         code.append("}\n");
 
-        GeneratorFileUtil.writeFile(
+        GeneratorFileUtil.writeJavaFile(
                 "framework",
                 "BasePage.java",
                 code.toString());

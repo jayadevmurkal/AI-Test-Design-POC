@@ -116,7 +116,7 @@ public class WaitUtilityGeneratorV2 {
     private static void writeFile(StringBuilder code) throws Exception {
 
         GeneratorFileUtil.writeFile(
-                "framework",
+                "src/main/java/framework",
                 "WaitUtil.java",
                 code.toString());
 

@@ -14,9 +14,11 @@ public class ConfigGeneratorV2 {
 
         config.append("browser=chrome\n");
         config.append("baseUrl=https://demoapp.com\n");
+
         config.append("implicitWait=10\n");
         config.append("explicitWait=20\n");
         config.append("pageLoadTimeout=30\n");
+
         config.append("headless=false\n");
 
         GeneratorFileUtil.writeFile(

@@ -38,7 +38,7 @@ public class FrameworkVersionGeneratorV2 {
 
                 code.append("}\n");
 
-                GeneratorFileUtil.writeFile(
+                GeneratorFileUtil.writeJavaFile(
                                 "config",
                                 "FrameworkVersion.java",
                                 code.toString());

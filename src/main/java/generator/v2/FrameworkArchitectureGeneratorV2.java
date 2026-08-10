@@ -1,5 +1,7 @@
 package generator.v2;
 
+import config.FrameworkConstants;
+
 public class FrameworkArchitectureGeneratorV2 {
 
     public static void generate() throws Exception {
@@ -140,7 +142,7 @@ public class FrameworkArchitectureGeneratorV2 {
 
         GeneratorFileUtil.writeFile(
                 "",
-                "FrameworkConstants.ARCHITECTURE_FILE",
+                FrameworkConstants.ARCHITECTURE_FILE,
                 code.toString());
     }
 }

@@ -1,10 +1,5 @@
 package generator.v2;
 
-import config.FrameworkConstants;
-
-import java.io.File;
-import java.io.FileWriter;
-
 public class BaseTestGeneratorV2 {
 
     public static void generate() throws Exception {
@@ -38,7 +33,7 @@ public class BaseTestGeneratorV2 {
 
         code.append("}\n");
 
-        GeneratorFileUtil.writeFile(
+        GeneratorFileUtil.writeJavaFile(
                 "framework",
                 "BaseTest.java",
                 code.toString());

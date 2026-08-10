@@ -10,7 +10,10 @@ public class TestNGGeneratorV2 {
 
         buildSuite(code);
 
-        writeFile(code);
+        GeneratorFileUtil.writeFile(
+                "",
+                "testng.xml",
+                code.toString());
 
         System.out.println("testng.xml generated successfully.");
     }
@@ -21,7 +24,7 @@ public class TestNGGeneratorV2 {
 
         code.append("<!DOCTYPE suite SYSTEM \"https://testng.org/testng-1.0.dtd\">\n\n");
 
-        code.append("<suite name=\"AI Automation Suite\">\n\n");
+        code.append("<suite name=\"AI Automation Suite\" verbose=\"1\" parallel=\"methods\" thread-count=\"2\">\n\n");
 
         code.append("    <listeners>\n");
         code.append("        <listener class-name=\"framework.ExtentListener\"/>\n");
@@ -31,9 +34,11 @@ public class TestNGGeneratorV2 {
 
         code.append("        <classes>\n");
 
-        code.append("            <class name=\"FrameworkConstants.TEST_PACKAGE\r\n" + //
-                "        + \".\"\r\n" + //
-                "        + FrameworkConstants.TEST_CLASS\"/>\n");
+        code.append("            <class name=\"")
+                .append(FrameworkConstants.TEST_PACKAGE)
+                .append(".")
+                .append(FrameworkConstants.TEST_CLASS)
+                .append("\"/>\n");
 
         code.append("        </classes>\n");
 
@@ -42,12 +47,4 @@ public class TestNGGeneratorV2 {
         code.append("</suite>\n");
     }
 
-    private static void writeFile(StringBuilder code) throws Exception {
-
-        GeneratorFileUtil.writeFile(
-                "",
-                "testng.xml",
-                code.toString());
-
-    }
 }

@@ -3,7 +3,6 @@ package generator.v2;
 import config.FrameworkConstants;
 
 import java.io.File;
-import java.io.FileWriter;
 
 public class ExtentTestManagerGeneratorV2 {
 
@@ -20,8 +19,6 @@ public class ExtentTestManagerGeneratorV2 {
         buildClassEnd(code);
 
         writeFile(code);
-
-        System.out.println("ExtentTestManager.java generated successfully.");
     }
 
     private static void buildPackage(StringBuilder code) {
@@ -79,21 +76,10 @@ public class ExtentTestManagerGeneratorV2 {
 
     private static void writeFile(StringBuilder code) throws Exception {
 
-        File folder = new File(
-                FrameworkConstants.GENERATED_OUTPUT_FOLDER + "/framework");
-
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        FileWriter writer = new FileWriter(
-                FrameworkConstants.GENERATED_OUTPUT_FOLDER
-                        + "/framework/ExtentTestManager.java");
-
-        writer.write(code.toString());
-
-        writer.close();
-
+        GeneratorFileUtil.writeFile(
+                "src/main/java/framework",
+                "ExtentTestManager.java",
+                code.toString());
     }
 
 }

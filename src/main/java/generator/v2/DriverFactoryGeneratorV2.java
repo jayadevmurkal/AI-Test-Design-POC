@@ -32,6 +32,7 @@ public class DriverFactoryGeneratorV2 {
         code.append("import org.openqa.selenium.firefox.FirefoxDriver;\n");
 
         code.append("import io.github.bonigarcia.wdm.WebDriverManager;\n\n");
+        code.append("import config.ConfigReader;\n");
 
     }
 
@@ -43,7 +44,7 @@ public class DriverFactoryGeneratorV2 {
 
     private static void buildDriverField(StringBuilder code) {
 
-        code.append("    private static WebDriver driver;\n\n");
+        code.append("    private static ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();\n\n");
 
     }
 
@@ -51,7 +52,7 @@ public class DriverFactoryGeneratorV2 {
 
         code.append("    public static WebDriver getDriver() {\n\n");
 
-        code.append("        if(driver == null) {\n\n");
+        code.append("        if(threadDriver.get() == null) {\n\n");
 
         code.append("            String browser = ConfigReader.get(\"browser\");\n\n");
 
@@ -59,30 +60,30 @@ public class DriverFactoryGeneratorV2 {
 
         code.append("                case \"chrome\":\n");
         code.append("                    WebDriverManager.chromedriver().setup();\n");
-        code.append("                    driver = new ChromeDriver();\n");
+        code.append("                    threadDriver.set(new ChromeDriver());\n");
         code.append("                    break;\n\n");
 
         code.append("                case \"edge\":\n");
         code.append("                    WebDriverManager.edgedriver().setup();\n");
-        code.append("                    driver = new EdgeDriver();\n");
+        code.append("                    threadDriver.set(new EdgeDriver());\n");
         code.append("                    break;\n\n");
 
         code.append("                case \"firefox\":\n");
         code.append("                WebDriverManager.firefoxdriver().setup();\n");
-        code.append("                    driver = new FirefoxDriver();\n");
+        code.append("                    threadDriver.set(new FirefoxDriver());\n");
         code.append("                    break;\n\n");
 
         code.append("                default:\n");
         code.append("                WebDriverManager.chromedriver().setup();\n");
-        code.append("                    driver = new ChromeDriver();\n");
+        code.append("                    threadDriver.set(new ChromeDriver());\n");
 
         code.append("            }\n\n");
 
-        code.append("            driver.manage().window().maximize();\n");
+        code.append("            threadDriver.get().manage().window().maximize();\n");
 
         code.append("        }\n\n");
 
-        code.append("        return driver;\n");
+        code.append("        return threadDriver.get();\n");
 
         code.append("    }\n\n");
 
@@ -92,11 +93,11 @@ public class DriverFactoryGeneratorV2 {
 
         code.append("    public static void quitDriver() {\n\n");
 
-        code.append("        if(driver != null) {\n");
+        code.append("        if(threadDriver.get() != null) {\n");
 
-        code.append("            driver.quit();\n");
+        code.append("            threadDriver.get().quit();\n");
 
-        code.append("            driver = null;\n");
+        code.append("            threadDriver.remove();\n");
 
         code.append("        }\n");
 
@@ -112,11 +113,10 @@ public class DriverFactoryGeneratorV2 {
 
     private static void writeFile(StringBuilder code) throws Exception {
 
-        GeneratorFileUtil.writeFile(
+        GeneratorFileUtil.writeJavaFile(
                 "framework",
                 "DriverFactory.java",
                 code.toString());
-
     }
 
 }

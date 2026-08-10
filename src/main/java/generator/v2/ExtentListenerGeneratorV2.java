@@ -1,10 +1,5 @@
 package generator.v2;
 
-import config.FrameworkConstants;
-
-import java.io.File;
-import java.io.FileWriter;
-
 public class ExtentListenerGeneratorV2 {
 
     public static void generate() throws Exception {
@@ -159,21 +154,10 @@ public class ExtentListenerGeneratorV2 {
 
     private static void writeFile(StringBuilder code) throws Exception {
 
-        File folder = new File(
-                FrameworkConstants.GENERATED_OUTPUT_FOLDER + "/framework");
-
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        FileWriter writer = new FileWriter(
-                FrameworkConstants.GENERATED_OUTPUT_FOLDER
-                        + "/framework/ExtentListener.java");
-
-        writer.write(code.toString());
-
-        writer.close();
-
+        GeneratorFileUtil.writeFile(
+                "src/main/java/framework",
+                "ExtentListener.java",
+                code.toString());
     }
 
 }

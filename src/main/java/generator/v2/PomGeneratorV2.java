@@ -14,7 +14,9 @@ public class PomGeneratorV2 {
                 buildBuildPlugins(code);
                 buildProjectEnd(code);
 
-                writeFile(code);
+                GeneratorFileUtil.writeRootFile(
+                                "pom.xml",
+                                code.toString());
 
                 System.out.println("pom.xml generated successfully.");
         }
@@ -40,6 +42,9 @@ public class PomGeneratorV2 {
 
                 code.append("        <maven.compiler.source>17</maven.compiler.source>\n");
                 code.append("        <maven.compiler.target>17</maven.compiler.target>\n");
+
+                code.append("        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n");
+                code.append("        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>\n");
 
                 code.append("    </properties>\n\n");
 
@@ -117,6 +122,13 @@ public class PomGeneratorV2 {
                 code.append("                <groupId>org.apache.maven.plugins</groupId>\n");
                 code.append("                <artifactId>maven-surefire-plugin</artifactId>\n");
                 code.append("                <version>3.5.3</version>\n");
+
+                code.append("                <configuration>\n");
+                code.append("                    <suiteXmlFiles>\n");
+                code.append("                        <suiteXmlFile>testng.xml</suiteXmlFile>\n");
+                code.append("                    </suiteXmlFiles>\n");
+                code.append("                </configuration>\n");
+
                 code.append("            </plugin>\n\n");
 
                 code.append("        </plugins>\n");
@@ -128,15 +140,6 @@ public class PomGeneratorV2 {
         private static void buildProjectEnd(StringBuilder code) {
 
                 code.append("</project>");
-
-        }
-
-        private static void writeFile(StringBuilder code) throws Exception {
-
-                GeneratorFileUtil.writeFile(
-                                "",
-                                "pom.xml",
-                                code.toString());
 
         }
 

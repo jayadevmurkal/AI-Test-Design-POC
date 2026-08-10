@@ -80,10 +80,9 @@ public class LoggerGeneratorV2 {
     private static void writeFile(StringBuilder code) throws Exception {
 
         GeneratorFileUtil.writeFile(
-                "framework",
+                "src/main/java/framework",
                 "LoggerUtil.java",
                 code.toString());
-
     }
 
 }

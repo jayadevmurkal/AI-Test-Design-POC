@@ -29,12 +29,17 @@ public class PageObjectGeneratorV2 {
         buildPageMethods(code, allLocators);
         buildClassEnd(code);
 
-        writeFile(code);
+        GeneratorFileUtil.writeJavaFile(
+                FrameworkConstants.PAGE_PACKAGE,
+                FrameworkConstants.PAGE_CLASS + ".java",
+                code.toString());
     }
 
     private static void buildPackage(StringBuilder code) {
 
-        code.append("package \" + FrameworkConstants.PAGE_PACKAGE + \";\n\n");
+        code.append("package ")
+                .append(FrameworkConstants.PAGE_PACKAGE)
+                .append(";\n\n");
 
     }
 
@@ -51,7 +56,9 @@ public class PageObjectGeneratorV2 {
 
     private static void buildClassStart(StringBuilder code) {
 
-        code.append("public class \" + FrameworkConstants.PAGE_CLASS extends BasePage {\n\n");
+        code.append("public class ")
+                .append(FrameworkConstants.PAGE_CLASS)
+                .append(" extends BasePage {\n\n");
 
     }
 
@@ -128,7 +135,9 @@ public class PageObjectGeneratorV2 {
 
     private static void buildConstructor(StringBuilder code) {
 
-        code.append("    public RegistrationPage(WebDriver driver) {\n");
+        code.append("    public ")
+                .append(FrameworkConstants.PAGE_CLASS)
+                .append("(WebDriver driver) {\n");
         code.append("        super(driver);\n");
         code.append("        PageFactory.initElements(driver, this);\n");
         code.append("    }\n\n");
@@ -138,7 +147,6 @@ public class PageObjectGeneratorV2 {
     private static void buildPageMethods(
             StringBuilder code,
             Map<String, String> locators) {
-
         locators.forEach((fieldName, locator) -> {
 
             String lower = fieldName.toLowerCase();
@@ -194,15 +202,6 @@ public class PageObjectGeneratorV2 {
     private static void buildClassEnd(StringBuilder code) {
 
         code.append("}\n");
-
-    }
-
-    private static void writeFile(StringBuilder code) throws Exception {
-
-        GeneratorFileUtil.writeFile(
-                FrameworkConstants.PAGE_PACKAGE,
-                FrameworkConstants.PAGE_CLASS + ".java",
-                code.toString());
 
     }
 

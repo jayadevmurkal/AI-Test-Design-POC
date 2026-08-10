@@ -1,17 +1,12 @@
 package generator.v2;
 
-import config.FrameworkConstants;
-
-import java.io.File;
-import java.io.FileWriter;
-
 public class ConfigReaderGeneratorV2 {
 
     public static void generate() throws Exception {
 
         StringBuilder code = new StringBuilder();
 
-        code.append("package framework;\n\n");
+        code.append("package config;\n\n");
 
         code.append("import java.io.InputStream;\n");
         code.append("import java.util.Properties;\n\n");
@@ -48,7 +43,7 @@ public class ConfigReaderGeneratorV2 {
 
         code.append("}\n");
 
-        GeneratorFileUtil.writeFile(
+        GeneratorFileUtil.writeJavaFile(
                 "framework",
                 "ConfigReader.java",
                 code.toString());

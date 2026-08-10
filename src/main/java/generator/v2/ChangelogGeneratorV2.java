@@ -1,5 +1,7 @@
 package generator.v2;
 
+import config.FrameworkConstants;
+
 public class ChangelogGeneratorV2 {
 
     public static void generate() throws Exception {
@@ -44,7 +46,7 @@ public class ChangelogGeneratorV2 {
 
         GeneratorFileUtil.writeFile(
                 "",
-                "FrameworkConstants.CHANGELOG_FILE",
+                FrameworkConstants.CHANGELOG_FILE,
                 code.toString());
     }
 }

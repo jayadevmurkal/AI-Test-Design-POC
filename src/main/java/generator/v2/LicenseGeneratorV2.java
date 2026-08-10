@@ -1,5 +1,7 @@
 package generator.v2;
 
+import config.FrameworkConstants;
+
 public class LicenseGeneratorV2 {
 
     public static void generate() throws Exception {
@@ -8,7 +10,9 @@ public class LicenseGeneratorV2 {
 
         code.append("MIT License\n\n");
 
-        code.append("Copyright (c) 2026 Jayadev M.M\n\n");
+        code.append("Copyright (c) 2026 ")
+                .append(FrameworkConstants.FRAMEWORK_AUTHOR)
+                .append("\n\n");
 
         code.append("Permission is hereby granted, free of charge, to any person obtaining a copy ");
         code.append("of this software and associated documentation files (the \"Software\"), ");
@@ -23,7 +27,7 @@ public class LicenseGeneratorV2 {
 
         GeneratorFileUtil.writeFile(
                 "",
-                "FrameworkConstants.LICENSE_FILE",
+                FrameworkConstants.LICENSE_FILE,
                 code.toString());
 
     }
