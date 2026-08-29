@@ -1,3 +1,5 @@
+// Jenkins Pipeline CI verification
+
 pipeline {
     agent any
 
